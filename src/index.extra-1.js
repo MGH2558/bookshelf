@@ -1,8 +1,8 @@
 import '@reach/dialog/styles.css'
 import * as React from 'react'
 import ReactDOM from 'react-dom'
-import {Dialog} from '@reach/dialog'
-import {Logo} from './components/logo'
+import { Dialog } from '@reach/dialog'
+import { Logo } from './components/logo'
 
 function App() {
   const [openModal, setOpenModal] = React.useState('none')

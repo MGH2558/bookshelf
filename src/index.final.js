@@ -1,6 +1,6 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
-import {Logo} from './components/logo'
+import { Logo } from './components/logo'
 
 function App() {
   return (
