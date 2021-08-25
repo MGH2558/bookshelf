@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import {Dialog as ReachDialog} from '@reach/dialog'
+import { Dialog as ReachDialog } from '@reach/dialog'
 
 const buttonVariants = {
   primary: {
@@ -18,7 +18,7 @@ const Button = styled.button(
     lineHeight: '1',
     borderRadius: '3px',
   },
-  ({variant = 'primary'}) => buttonVariants[variant],
+  ({ variant = 'primary' }) => buttonVariants[variant],
 )
 
 const Input = styled.input({
@@ -60,4 +60,4 @@ const FormGroup = styled.div({
   flexDirection: 'column',
 })
 
-export {Button, Input, CircleButton, Dialog, FormGroup}
+export { Button, Input, CircleButton, Dialog, FormGroup }
