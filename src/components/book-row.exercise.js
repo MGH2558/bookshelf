@@ -1,13 +1,12 @@
 /** @jsx jsx */
-import {jsx} from '@emotion/core'
+import { jsx } from '@emotion/core'
 
-// We're going to turn the entire book row into a link to the book page
-// 🐨 import the Link component from react-router-dom
+import { Link } from 'react-router-dom'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
 
-function BookRow({book}) {
-  const {title, author, coverImageUrl} = book
+function BookRow({ book }) {
+  const { title, author, coverImageUrl } = book
 
   const id = `book-row-book-${book.id}`
 
@@ -20,11 +19,8 @@ function BookRow({book}) {
         position: 'relative',
       }}
     >
-      {/*
-          🐨 Turn this div into a Link
-          and add a to prop to make it direct to `/book/${book.id}`
-      */}
-      <div
+      <Link
+        to={`/book/${book.id}`}
         aria-labelledby={id}
         css={{
           minHeight: 270,
@@ -54,12 +50,12 @@ function BookRow({book}) {
           <img
             src={coverImageUrl}
             alt={`${title} book cover`}
-            css={{maxHeight: '100%', width: '100%'}}
+            css={{ maxHeight: '100%', width: '100%' }}
           />
         </div>
-        <div css={{flex: 1}}>
-          <div css={{display: 'flex', justifyContent: 'space-between'}}>
-            <div css={{flex: 1}}>
+        <div css={{ flex: 1 }}>
+          <div css={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div css={{ flex: 1 }}>
               <h2
                 id={id}
                 css={{
@@ -71,7 +67,7 @@ function BookRow({book}) {
                 {title}
               </h2>
             </div>
-            <div css={{marginLeft: 10}}>
+            <div css={{ marginLeft: 10 }}>
               <div
                 css={{
                   marginTop: '0.4em',
@@ -84,13 +80,13 @@ function BookRow({book}) {
               <small>{book.publisher}</small>
             </div>
           </div>
-          <small css={{whiteSpace: 'break-spaces', display: 'block'}}>
+          <small css={{ whiteSpace: 'break-spaces', display: 'block' }}>
             {book.synopsis.substring(0, 500)}...
           </small>
         </div>
-      </div>
+      </Link>
     </div>
   )
 }
 
-export {BookRow}
+export { BookRow }

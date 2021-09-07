@@ -1,17 +1,17 @@
 /** @jsx jsx */
-import {jsx} from '@emotion/core'
+import { jsx } from '@emotion/core'
 
 import * as React from 'react'
 import Tooltip from '@reach/tooltip'
-import {FaSearch, FaTimes} from 'react-icons/fa'
-import {Input, BookListUL, Spinner} from 'components/lib'
-import {BookRow} from 'components/book-row'
-import {client} from 'utils/api-client'
+import { FaSearch, FaTimes } from 'react-icons/fa'
+import { Input, BookListUL, Spinner } from 'components/lib'
+import { BookRow } from 'components/book-row'
+import { client } from 'utils/api-client'
 import * as colors from 'styles/colors'
-import {useAsync} from 'utils/hooks'
+import { useAsync } from 'utils/hooks'
 
-function DiscoverBooksScreen({user}) {
-  const {data, error, run, isLoading, isError, isSuccess} = useAsync()
+function DiscoverBooksScreen({ user }) {
+  const { data, error, run, isLoading, isError, isSuccess } = useAsync()
   const [query, setQuery] = React.useState()
   const [queried, setQueried] = React.useState(false)
 
@@ -19,7 +19,7 @@ function DiscoverBooksScreen({user}) {
     if (!queried) {
       return
     }
-    run(client(`books?query=${encodeURIComponent(query)}`, {token: user.token}))
+    run(client(`books?query=${encodeURIComponent(query)}`, { token: user.token }))
   }, [query, queried, run, user.token])
 
   function handleSearchSubmit(event) {
@@ -34,7 +34,7 @@ function DiscoverBooksScreen({user}) {
         <Input
           placeholder="Search books..."
           id="search"
-          css={{width: '100%'}}
+          css={{ width: '100%' }}
         />
         <Tooltip label="Search Books">
           <label htmlFor="search">
@@ -50,7 +50,7 @@ function DiscoverBooksScreen({user}) {
               {isLoading ? (
                 <Spinner />
               ) : isError ? (
-                <FaTimes aria-label="error" css={{color: colors.danger}} />
+                <FaTimes aria-label="error" css={{ color: colors.danger }} />
               ) : (
                 <FaSearch aria-label="search" />
               )}
@@ -60,7 +60,7 @@ function DiscoverBooksScreen({user}) {
       </form>
 
       {isError ? (
-        <div css={{color: colors.danger}}>
+        <div css={{ color: colors.danger }}>
           <p>There was an error:</p>
           <pre>{error.message}</pre>
         </div>
@@ -68,7 +68,7 @@ function DiscoverBooksScreen({user}) {
 
       {isSuccess ? (
         data?.books?.length ? (
-          <BookListUL css={{marginTop: 20}}>
+          <BookListUL css={{ marginTop: 20 }}>
             {data.books.map(book => (
               <li key={book.id} aria-label={book.title}>
                 <BookRow key={book.id} book={book} />
@@ -83,4 +83,4 @@ function DiscoverBooksScreen({user}) {
   )
 }
 
-export {DiscoverBooksScreen}
+export { DiscoverBooksScreen }

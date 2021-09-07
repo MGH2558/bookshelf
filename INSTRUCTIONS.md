@@ -155,7 +155,7 @@ So for this extra credit you need to configure each of these to redirect `/` to
 We need to add redirect functionality to the webpack server that `react-scripts`
 is running for us. We can do that with the `./src/setupProxy.js` file. In that
 file we export a function that accepts an
-[express `app`](https://expressjs.com/) and attaches a `get` to handle requests
+[express `app`](https://expressjclss.com/) and attaches a `get` to handle requests
 sent to a URL matching this regex: `/\/$/` and redirects to `/discover`.
 
 ```javascript
