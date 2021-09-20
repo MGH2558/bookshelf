@@ -8,16 +8,12 @@ import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
 import { StatusButtons } from './status-buttons'
 import { Rating } from './rating'
+import { useListItem } from 'utils/list-items'
 
 function BookRow({ user, book }) {
   const { title, author, coverImageUrl } = book
 
-  const { data: listItems } = useQuery({
-    queryKey: 'list-items',
-    queryFn: () => client('list-items', { token: user.token }).then(data => data.listItems)
-  })
-
-  const listItem = listItems?.find(li => li.bookId === book.id) ?? null
+  const listItem = useListItem(user, book.id)
 
   const id = `book-row-book-${book.id}`
 
