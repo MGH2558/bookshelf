@@ -4,6 +4,7 @@ import { client } from './api-client'
 const defaultMutationOptions = {
     onSettled: () => queryCache.invalidateQueries('list-items'),
 }
+
 function useListItems(user) {
     const { data: listItems } = useQuery({
         queryKey: 'list-items',
@@ -18,7 +19,7 @@ function useListItem(user,bookId) {
     return listItems.find(li => li.bookId === bookId) ?? null
 }
 
-function useUpdateListItem(user) {
+function useUpdateListItem(user, options) {
     return useMutation(
         updates => 
         client(`list-items/${updates.id}`, {
@@ -26,23 +27,23 @@ function useUpdateListItem(user) {
           data: updates,
           token: user.token,
         }), 
-        defaultMutationOptions,
+        {...defaultMutationOptions, ...options},
       )
 }
 
-function useRemoveListItem(user) {
+function useRemoveListItem(user,options) {
     return useMutation(
         ({ id }) => client(`list-items/${id}`, { method: 'DELETE', token: user.token }),
-        defaultMutationOptions,
+        {...defaultMutationOptions, ...options},
       )
 }
 
-function useCreateListItem(user) {
+function useCreateListItem(user, options) {
     return useMutation(
        ({ bookId }) => {
         client('list-items', { data: { bookId }, token: user.token })
         },
-      defaultMutationOptions,
+        {...defaultMutationOptions, ...options},
       )
 }
 

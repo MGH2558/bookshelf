@@ -1,7 +1,6 @@
-// 🐨 get the queryCache from 'react-query'
-
 import * as auth from 'auth-provider'
 import { queryCache } from 'react-query'
+
 const apiURL = process.env.REACT_APP_API_URL
 
 async function client(

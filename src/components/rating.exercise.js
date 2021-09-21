@@ -1,10 +1,11 @@
 /** @jsx jsx */
-import {jsx} from '@emotion/core'
+import { jsx } from '@emotion/core'
 
 import * as React from 'react'
-import {FaStar} from 'react-icons/fa'
+import { FaStar } from 'react-icons/fa'
 import * as colors from 'styles/colors'
 import { useUpdateListItem } from 'utils/list-items'
+import { ErrorMessage } from './lib'
 
 const visuallyHiddenCSS = {
   border: '0',
@@ -17,10 +18,10 @@ const visuallyHiddenCSS = {
   width: '1px',
 }
 
-function Rating({listItem, user}) {
+function Rating({ listItem, user }) {
   const [isTabbing, setIsTabbing] = React.useState(false)
-  
-  const [update] = useUpdateListItem(user)
+
+  const [update, { error, isError }] = useUpdateListItem(user)
 
   React.useEffect(() => {
     function handleKeyDown(event) {
@@ -28,13 +29,13 @@ function Rating({listItem, user}) {
         setIsTabbing(true)
       }
     }
-    document.addEventListener('keydown', handleKeyDown, {once: true})
+    document.addEventListener('keydown', handleKeyDown, { once: true })
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [])
 
   const rootClassName = `list-item-${listItem.id}`
 
-  const stars = Array.from({length: 5}).map((x, i) => {
+  const stars = Array.from({ length: 5 }).map((x, i) => {
     const ratingId = `rating-${listItem.id}-${i}`
     const ratingValue = i + 1
     return (
@@ -46,17 +47,13 @@ function Rating({listItem, user}) {
           value={ratingValue}
           checked={ratingValue === listItem.rating}
           onChange={() => {
-            update({id: listItem.id, rating: ratingValue})
+            update({ id: listItem.id, rating: ratingValue })
           }}
           css={[
             visuallyHiddenCSS,
             {
-              [`.${rootClassName} &:checked ~ label`]: {color: colors.gray20},
-              [`.${rootClassName} &:checked + label`]: {color: 'orange'},
-              // !important is here because we're doing special non-css-in-js things
-              // and so we have to deal with specificity and cascade. But, I promise
-              // this is better than trying to make this work with JavaScript.
-              // So deal with it 😎
+              [`.${rootClassName} &:checked ~ label`]: { color: colors.gray20 },
+              [`.${rootClassName} &:checked + label`]: { color: 'orange' },
               [`.${rootClassName} &:hover ~ label`]: {
                 color: `${colors.gray20} !important`,
               },
@@ -82,7 +79,7 @@ function Rating({listItem, user}) {
           <span css={visuallyHiddenCSS}>
             {ratingValue} {ratingValue === 1 ? 'star' : 'stars'}
           </span>
-          <FaStar css={{width: '16px', margin: '0 2px'}} />
+          <FaStar css={{ width: '16px', margin: '0 2px' }} />
         </label>
       </React.Fragment>
     )
@@ -99,9 +96,16 @@ function Rating({listItem, user}) {
         },
       }}
     >
-      <span css={{display: 'flex'}}>{stars}</span>
+      <span css={{ display: 'flex' }}>{stars}</span>
+      {isError ? (
+          <ErrorMessage
+            error={error}
+            variant="inline"
+            css={{ marginLeft: 6, fontSize: '0.7em' }}
+          />
+      ) : null}
     </div>
   )
 }
 
-export {Rating}
+export { Rating }

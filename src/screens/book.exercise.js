@@ -2,6 +2,7 @@
 import { jsx } from '@emotion/core'
 
 import * as React from 'react'
+import { useState } from 'react'
 import debounceFn from 'debounce-fn'
 import { FaRegCalendarAlt } from 'react-icons/fa'
 import Tooltip from '@reach/tooltip'
@@ -9,7 +10,7 @@ import { useParams } from 'react-router-dom'
 import { formatDate } from 'utils/misc'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
-import { Textarea } from 'components/lib'
+import { ErrorMessage, Spinner, Textarea } from 'components/lib'
 import { Rating } from 'components/rating'
 import { StatusButtons } from 'components/status-buttons'
 import { useListItem, useUpdateListItem } from 'utils/list-items'
@@ -103,9 +104,10 @@ function ListItemTimeframe({ listItem }) {
   )
 }
 
+
 function NotesTextarea({ listItem, user }) {
-  
-  const [mutate] = useUpdateListItem(user)
+
+  const [mutate, { error, isError, isLoading }] = useUpdateListItem(user)
 
   const debouncedMutate = React.useMemo(() => debounceFn(mutate, { wait: 300 }), [
     mutate,
@@ -130,6 +132,16 @@ function NotesTextarea({ listItem, user }) {
         >
           Notes
         </label>
+        {isError ? (
+          <ErrorMessage
+            error={error}
+            variant="inline"
+            css={{ marginLeft: 6, fontSize: '1em' }}
+          />
+        ) : null}
+        {isLoading ? (
+          <Spinner />
+        ) : null}
       </div>
       <Textarea
         id="notes"

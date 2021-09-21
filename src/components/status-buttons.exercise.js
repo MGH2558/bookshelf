@@ -19,10 +19,14 @@ import { useListItem, useUpdateListItem, useCreateListItem, useRemoveListItem } 
 
 
 function TooltipButton({ label, highlight, onClick, icon, ...rest }) {
-  const { isLoading, isError, error, run } = useAsync()
+  const { isLoading, isError, error, run, reset } = useAsync()
 
   function handleClick() {
-    run(onClick())
+    if (isError) {
+      reset()
+    } else {
+      run(onClick())
+    }
   }
 
   return (
@@ -51,13 +55,11 @@ function TooltipButton({ label, highlight, onClick, icon, ...rest }) {
 
 function StatusButtons({ user, book }) {
 
-  const listItem = useListItem(user,book.id)
+  const listItem = useListItem(user, book.id)
 
-  const [remove] = useRemoveListItem(user)
-
-  const [create] = useCreateListItem(user)
-
-  const [update] = useUpdateListItem(user)
+  const [remove] = useRemoveListItem(user, { throwOnError: true })
+  const [create] = useCreateListItem(user, { throwOnError: true })
+  const [update] = useUpdateListItem(user, { throwOnError: true })
 
 
   return (
