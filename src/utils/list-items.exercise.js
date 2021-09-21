@@ -42,7 +42,7 @@ function useCreateListItem(user) {
        ({ bookId }) => {
         client('list-items', { data: { bookId }, token: user.token })
         },
-      defaultMutationOptions.onSettled,
+      defaultMutationOptions,
       )
 }
 
