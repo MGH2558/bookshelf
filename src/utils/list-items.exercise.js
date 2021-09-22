@@ -8,7 +8,17 @@ const defaultMutationOptions = {
 function useListItems(user) {
     const { data: listItems } = useQuery({
         queryKey: 'list-items',
-        queryFn: () => client('list-items', { token: user.token }).then(data => data.listItems)
+        queryFn: () => client('list-items', { token: user.token }).then(data => data.listItems),
+        config: {
+          onSuccess(listItems) {
+            for(let listItem of listItems) {
+              queryCache.setQueryData(
+                ['list-items', {bookId: listItem.book.id}],
+                listItem.book
+              )
+            }
+          }
+        }
       })
     
     return listItems ?? []

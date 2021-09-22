@@ -23,6 +23,13 @@ const getBookSearchConfig = (query, user) => ({
     client(`books?query=${encodeURIComponent(query)}`, {
       token: user.token,
     }).then(data => data.books),
+    config: {
+      onSuccess(books) {
+        for(let book of books) {
+          queryCache.setQueryData(['book', {bookId: book.id}], book)
+        }
+      }
+    }
 })
 
 function useBookSearch(query, user) {
