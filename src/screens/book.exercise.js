@@ -1,29 +1,26 @@
 /** @jsx jsx */
-import {jsx} from '@emotion/core'
+import { jsx } from '@emotion/core'
 
 import * as React from 'react'
 import debounceFn from 'debounce-fn'
-import {FaRegCalendarAlt} from 'react-icons/fa'
+import { FaRegCalendarAlt } from 'react-icons/fa'
 import Tooltip from '@reach/tooltip'
-import {useParams} from 'react-router-dom'
-import {useBook} from 'utils/books'
-import {useListItem, useUpdateListItem} from 'utils/list-items'
-import {formatDate} from 'utils/misc'
+import { useParams } from 'react-router-dom'
+import { useBook } from 'utils/books'
+import { useListItem, useUpdateListItem } from 'utils/list-items'
+import { formatDate } from 'utils/misc'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
-import {Spinner, Textarea, ErrorMessage} from 'components/lib'
-import {Rating} from 'components/rating'
-import {StatusButtons} from 'components/status-buttons'
+import { Spinner, Textarea, ErrorMessage } from 'components/lib'
+import { Rating } from 'components/rating'
+import { StatusButtons } from 'components/status-buttons'
 
-// 💣 remove the user prop
-function BookScreen({user}) {
-  const {bookId} = useParams()
-  // 💣 remove the user argument
-  const book = useBook(bookId, user)
-  // 💣 remove the user argument
-  const listItem = useListItem(bookId, user)
+function BookScreen() {
+  const { bookId } = useParams()
+  const book = useBook(bookId)
+  const listItem = useListItem(bookId)
 
-  const {title, author, coverImageUrl, publisher, synopsis} = book
+  const { title, author, coverImageUrl, publisher, synopsis } = book
 
   return (
     <div>
@@ -42,15 +39,15 @@ function BookScreen({user}) {
         <img
           src={coverImageUrl}
           alt={`${title} book cover`}
-          css={{width: '100%', maxWidth: '14rem'}}
+          css={{ width: '100%', maxWidth: '14rem' }}
         />
         <div>
-          <div css={{display: 'flex', position: 'relative'}}>
-            <div css={{flex: 1, justifyContent: 'space-between'}}>
+          <div css={{ display: 'flex', position: 'relative' }}>
+            <div css={{ flex: 1, justifyContent: 'space-between' }}>
               <h1>{title}</h1>
               <div>
                 <i>{author}</i>
-                <span css={{marginRight: 6, marginLeft: 6}}>|</span>
+                <span css={{ marginRight: 6, marginLeft: 6 }}>|</span>
                 <i>{publisher}</i>
               </div>
             </div>
@@ -65,19 +62,13 @@ function BookScreen({user}) {
               }}
             >
               {book.loadingBook ? null : (
-                <StatusButtons
-                  // 💣 remove the user prop here
-                  user={user}
-                  book={book}
-                />
+                <StatusButtons book={book} />
               )}
             </div>
           </div>
-          <div css={{marginTop: 10, height: 46}}>
+          <div css={{ marginTop: 10, height: 46 }}>
             {listItem?.finishDate ? (
               <Rating
-                // 💣 remove the user prop here
-                user={user}
                 listItem={listItem}
               />
             ) : null}
@@ -89,8 +80,6 @@ function BookScreen({user}) {
       </div>
       {!book.loadingBook && listItem ? (
         <NotesTextarea
-          // 💣 remove the user prop here
-          user={user}
           listItem={listItem}
         />
       ) : null}
@@ -98,15 +87,15 @@ function BookScreen({user}) {
   )
 }
 
-function ListItemTimeframe({listItem}) {
+function ListItemTimeframe({ listItem }) {
   const timeframeLabel = listItem.finishDate
     ? 'Start and finish date'
     : 'Start date'
 
   return (
     <Tooltip label={timeframeLabel}>
-      <div aria-label={timeframeLabel} css={{marginTop: 6}}>
-        <FaRegCalendarAlt css={{marginTop: -2, marginRight: 5}} />
+      <div aria-label={timeframeLabel} css={{ marginTop: 6 }}>
+        <FaRegCalendarAlt css={{ marginTop: -2, marginRight: 5 }} />
         <span>
           {formatDate(listItem.startDate)}{' '}
           {listItem.finishDate ? `— ${formatDate(listItem.finishDate)}` : null}
@@ -116,16 +105,14 @@ function ListItemTimeframe({listItem}) {
   )
 }
 
-// 💣 remove the user prop here
-function NotesTextarea({listItem, user}) {
-  // 💣 remove the user argument here
-  const [mutate, {error, isError, isLoading}] = useUpdateListItem(user)
-  const debouncedMutate = React.useMemo(() => debounceFn(mutate, {wait: 300}), [
+function NotesTextarea({ listItem }) {
+  const [mutate, { error, isError, isLoading }] = useUpdateListItem()
+  const debouncedMutate = React.useMemo(() => debounceFn(mutate, { wait: 300 }), [
     mutate,
   ])
 
   function handleNotesChange(e) {
-    debouncedMutate({id: listItem.id, notes: e.target.value})
+    debouncedMutate({ id: listItem.id, notes: e.target.value })
   }
 
   return (
@@ -147,7 +134,7 @@ function NotesTextarea({listItem, user}) {
           <ErrorMessage
             error={error}
             variant="inline"
-            css={{marginLeft: 6, fontSize: '0.7em'}}
+            css={{ marginLeft: 6, fontSize: '0.7em' }}
           />
         ) : null}
         {isLoading ? <Spinner /> : null}
@@ -156,10 +143,10 @@ function NotesTextarea({listItem, user}) {
         id="notes"
         defaultValue={listItem.notes}
         onChange={handleNotesChange}
-        css={{width: '100%', minHeight: 300}}
+        css={{ width: '100%', minHeight: 300 }}
       />
     </React.Fragment>
   )
 }
 
-export {BookScreen}
+export { BookScreen }

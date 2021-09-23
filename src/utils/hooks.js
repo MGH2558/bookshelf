@@ -12,11 +12,6 @@ function useSafeDispatch(dispatch) {
   )
 }
 
-// Example usage:
-// const {data, error, status, run} = useAsync()
-// React.useEffect(() => {
-//   run(fetchPokemon(pokemonName))
-// }, [pokemonName, run])
 const defaultInitialState = {status: 'idle', data: null, error: null}
 function useAsync(initialState) {
   const initialStateRef = React.useRef({
