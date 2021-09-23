@@ -2,7 +2,6 @@
 import { jsx } from '@emotion/core'
 
 import * as React from 'react'
-import { useState } from 'react'
 import debounceFn from 'debounce-fn'
 import { FaRegCalendarAlt } from 'react-icons/fa'
 import Tooltip from '@reach/tooltip'
